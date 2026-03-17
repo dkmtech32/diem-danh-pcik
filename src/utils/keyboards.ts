@@ -1,4 +1,5 @@
-import type { TelegramInlineKeyboardMarkup } from '../types/telegram';
+import type { TelegramInlineKeyboardMarkup, TelegramInlineKeyboardButton } from '../types/telegram';
+import type { Env } from '../config';
 
 /**
  * Build the RSVP keyboard for an open session.
@@ -39,23 +40,38 @@ export function buildFinalizedKeyboard(sessionId: number): TelegramInlineKeyboar
 /**
  * Build the keyboard for the bill split card.
  */
-export function buildSplitKeyboard(sessionId: number): TelegramInlineKeyboardMarkup {
-  return {
-    inline_keyboard: [
-      [
-        { text: '💰 Tôi đã trả', callback_data: `mp:${sessionId}` },
-        { text: '📊 Tình trạng của tôi', callback_data: `ms:${sessionId}` },
-      ],
-      [
-        { text: '⏳ Ai còn nợ', callback_data: `vu:${sessionId}` },
-        { text: '🔄 Cập nhật lại', callback_data: `rf:${sessionId}` },
-      ],
-      [
-        { text: '🏁 Chốt sổ kèo này', callback_data: `cl:${sessionId}` },
-        { text: '🗑️ Hủy kèo', callback_data: `cx:${sessionId}` },
-      ],
+export function buildSplitKeyboard(
+  sessionId: number,
+  perPersonAmount?: number,
+  sessionTitle?: string,
+  env?: Env,
+): TelegramInlineKeyboardMarkup {
+  const keyboard: TelegramInlineKeyboardButton[][] = [
+    [
+      { text: '💰 Tôi đã trả', callback_data: `mp:${sessionId}` },
+      { text: '📊 Tình trạng của tôi', callback_data: `ms:${sessionId}` },
     ],
-  };
+    [
+      { text: '⏳ Ai còn nợ', callback_data: `vu:${sessionId}` },
+      { text: '🔄 Cập nhật lại', callback_data: `rf:${sessionId}` },
+    ],
+    [
+      { text: '🏁 Chốt sổ kèo này', callback_data: `cl:${sessionId}` },
+      { text: '🗑️ Hủy kèo', callback_data: `cx:${sessionId}` },
+    ],
+  ];
+
+  if (perPersonAmount && sessionTitle && env?.ADMIN_BANK_BIN && env?.ADMIN_BANK_ACCOUNT) {
+    // Keep description short for VietQR limits
+    const addInfo = encodeURIComponent(sessionTitle.substring(0, 40));
+    const accountName = env.ADMIN_BANK_NAME ? encodeURIComponent(env.ADMIN_BANK_NAME) : '';
+    // Generate a vietqr.io image that users can scan or open in their browser
+    const qrUrl = `https://img.vietqr.io/image/${env.ADMIN_BANK_BIN}-${env.ADMIN_BANK_ACCOUNT}-compact2.jpg?amount=${perPersonAmount}&addInfo=${addInfo}&accountName=${accountName}`;
+
+    keyboard.unshift([{ text: '🏦 Quét QR Thanh Toán', url: qrUrl }]);
+  }
+
+  return { inline_keyboard: keyboard };
 }
 
 /**

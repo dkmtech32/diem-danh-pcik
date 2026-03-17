@@ -542,7 +542,8 @@ export async function handlePendingSplitInput(
   const counts = await services.splitService.countBySession(sessionId);
   const updatedSession = await services.sessionService.getById(sessionId);
   const text2 = buildSplitMessage(updatedSession!, splits, counts.total);
-  const keyboard = buildSplitKeyboard(sessionId);
+  const perPerson = splits.length > 0 ? splits[0].amount_due : undefined;
+  const keyboard = buildSplitKeyboard(sessionId, perPerson, updatedSession?.title, env);
 
   const sent = await telegram.sendMessage(chatId, text2, keyboard);
 
@@ -591,7 +592,8 @@ async function handleSplitBillConfirmCallback(
   const counts = await services.splitService.countBySession(sessionId);
   const updatedSession = await services.sessionService.getById(sessionId);
   const text = buildSplitMessage(updatedSession!, splits, counts.total);
-  const keyboard = buildSplitKeyboard(sessionId);
+  const perPerson = splits.length > 0 ? splits[0].amount_due : undefined;
+  const keyboard = buildSplitKeyboard(sessionId, perPerson, updatedSession?.title, env);
 
   await telegram.sendMessage(chatId, text, keyboard);
 }
@@ -873,7 +875,8 @@ async function refreshSplitMessage(
   const counts = await services.splitService.countBySession(sessionId);
   const updatedSession = await services.sessionService.getById(sessionId);
   const text = buildSplitMessage(updatedSession ?? session, splits, counts.total);
-  const keyboard = buildSplitKeyboard(sessionId);
+  const perPerson = splits.length > 0 ? splits[0].amount_due : undefined;
+  const keyboard = buildSplitKeyboard(sessionId, perPerson, (updatedSession ?? session).title, env);
 
   if (session.telegram_message_id) {
     await telegram.editMessageText(chatId, session.telegram_message_id, text, keyboard);

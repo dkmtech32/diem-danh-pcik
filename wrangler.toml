@@ -7,3 +7,9 @@ binding = "DB"
 database_name = "pickleball-db"
 database_id = "ff0e9dae-1fd7-4700-aaa7-8fe9e5c6039f"
 migrations_dir = "migrations"
+
+[vars]
+# Optional: Set bank info to display a "Pay via VietQR" button on split bills
+# ADMIN_BANK_BIN = "vcb"  # Bank BIN code or short name (e.g. 970436, vcb, tcb)
+# ADMIN_BANK_ACCOUNT = "123456789"
+# ADMIN_BANK_NAME = "NGUYEN VAN A"
