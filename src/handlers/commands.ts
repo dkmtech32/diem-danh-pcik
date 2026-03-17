@@ -38,34 +38,34 @@ export async function handleCommand(
       break;
   }
 }
-
 async function handleStart(message: TelegramMessage, telegram: TelegramService): Promise<void> {
   await telegram.sendMessage(
     message.chat.id,
     '🏓 <b>Pickleball Bot</b>\n\n' +
-      'I help manage pickleball sessions, attendance, bill splitting, and payment tracking.\n\n' +
-      'Commands:\n' +
-      '/session — Create a new session\n' +
-      '/sessions — View recent sessions\n' +
-      '/help — Show help',
+      'Tôi sinh ra để lo mấy việc lặt vặt cho team pickleball: điểm danh, chia tiền sân, coi ai còn nợ tiền...\n' +
+      'Nói chung là làm mấy việc mà mọi người hay quên 😏\n\n' +
+      'Lệnh có thể dùng:\n' +
+      '/session — Tạo kèo pickleball mới\n' +
+      '/sessions — Xem lại mấy kèo gần đây\n' +
+      '/help — Xem hướng dẫn (nếu vẫn còn mù mờ)',
   );
 }
 
 async function handleHelp(message: TelegramMessage, telegram: TelegramService): Promise<void> {
   await telegram.sendMessage(
     message.chat.id,
-    '📖 <b>How to use</b>\n\n' +
-      '<b>Create a session:</b>\n' +
-      '<code>/session Title | Date/Time | Location | EstimatedCost</code>\n' +
-      'Example: <code>/session Friday Pickleball | 7:00 PM | Court A | 120000</code>\n\n' +
-      '<b>Workflow:</b>\n' +
-      '1️⃣ Admin creates session with /session\n' +
-      '2️⃣ Members tap Join / Maybe / Skip\n' +
-      '3️⃣ Admin taps Finalize Attendance\n' +
-      '4️⃣ Admin taps Split Bill and enters total cost\n' +
-      '5️⃣ Members tap Mark Paid\n' +
-      '6️⃣ Admin taps Close Session\n\n' +
-      '<b>View recent sessions:</b>\n' +
+    '📖 <b>Hướng dẫn xài bot (đọc đi rồi hỏi sau)</b>\n\n' +
+      '<b>Tạo kèo chơi:</b>\n' +
+      '<code>/session Tiêu đề | Ngày/Giờ | Địa điểm | Dự kiến tiền</code>\n' +
+      'Ví dụ: <code>/session Pickleball tối thứ 6 | 7:00 PM | Sân A | 120000</code>\n\n' +
+      '<b>Luồng hoạt động:</b>\n' +
+      '1️⃣ Admin tạo kèo bằng /session\n' +
+      '2️⃣ Mọi người bấm <b>Đi luôn</b> / <b>Để coi đã</b> / <b>Nghỉ kèo</b> để báo tình hình\n' +
+      '3️⃣ Admin chốt danh sách bằng nút <b>Chốt danh sách</b>\n' +
+      '4️⃣ Admin bấm <b>Chia tiền sân</b> rồi nhập tổng tiền sân\n' +
+      '5️⃣ Ai trả tiền rồi thì bấm <b>Đã trả</b>\n' +
+      '6️⃣ Admin bấm <b>Chốt sổ kèo này</b> để kết sổ\n\n' +
+      '<b>Xem lại các kèo gần đây:</b>\n' +
       '/sessions',
   );
 }
@@ -81,7 +81,7 @@ async function handleSession(
   // Check admin
   const admin = await isGroupAdmin(telegram, message.chat.id, message.from!.id, env.DB, group.id, member.id);
   if (!admin) {
-    await telegram.sendMessage(message.chat.id, '⚠️ Only group admins can create sessions.');
+    await telegram.sendMessage(message.chat.id, '⚠️ Chỉ admin mới được tạo kèo.');
     return;
   }
 
@@ -91,7 +91,7 @@ async function handleSession(
   if (!title) {
     await telegram.sendMessage(
       message.chat.id,
-      '⚠️ Please provide a session title.\n\nUsage: <code>/session Title | Date/Time | Location | Cost</code>',
+      '⚠️ Vui lòng cung cấp tiêu đề kèo.\n\nUsage: <code>/session Tiêu đề | Ngày/Giờ | Địa điểm | Dự kiến tiền</code>',
     );
     return;
   }

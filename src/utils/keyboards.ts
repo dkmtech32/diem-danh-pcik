@@ -8,12 +8,12 @@ export function buildRsvpKeyboard(sessionId: number): TelegramInlineKeyboardMark
   return {
     inline_keyboard: [
       [
-        { text: '✅ Join', callback_data: `r:j:${sessionId}` },
-        { text: '🤔 Maybe', callback_data: `r:m:${sessionId}` },
-        { text: '❌ Skip', callback_data: `r:s:${sessionId}` },
+        { text: '✅ Đi luôn', callback_data: `r:j:${sessionId}` },
+        { text: '🤔 Để coi đã', callback_data: `r:m:${sessionId}` },
+        { text: '❌ Nghỉ kèo', callback_data: `r:s:${sessionId}` },
       ],
-      [{ text: '👥 View Players', callback_data: `v:p:${sessionId}` }],
-      [{ text: '🔒 Finalize Attendance', callback_data: `f:${sessionId}` }],
+      [{ text: '👥 Xem danh sách', callback_data: `v:p:${sessionId}` }],
+      [{ text: '🔒 Chốt danh sách', callback_data: `f:${sessionId}` }],
     ],
   };
 }
@@ -24,8 +24,8 @@ export function buildRsvpKeyboard(sessionId: number): TelegramInlineKeyboardMark
 export function buildFinalizedKeyboard(sessionId: number): TelegramInlineKeyboardMarkup {
   return {
     inline_keyboard: [
-      [{ text: '👥 View Players', callback_data: `v:p:${sessionId}` }],
-      [{ text: '💸 Split Bill', callback_data: `sb:${sessionId}` }],
+      [{ text: '👥 Xem danh sách', callback_data: `v:p:${sessionId}` }],
+      [{ text: '💸 Chia tiền sân', callback_data: `sb:${sessionId}` }],
     ],
   };
 }
@@ -37,14 +37,14 @@ export function buildSplitKeyboard(sessionId: number): TelegramInlineKeyboardMar
   return {
     inline_keyboard: [
       [
-        { text: '💰 Mark Paid', callback_data: `mp:${sessionId}` },
-        { text: '📊 My Status', callback_data: `ms:${sessionId}` },
+        { text: '💰 Tôi đã trả', callback_data: `mp:${sessionId}` },
+        { text: '📊 Tình trạng của tôi', callback_data: `ms:${sessionId}` },
       ],
       [
-        { text: '⏳ View Unpaid', callback_data: `vu:${sessionId}` },
-        { text: '🔄 Refresh', callback_data: `rf:${sessionId}` },
+        { text: '⏳ Ai còn nợ', callback_data: `vu:${sessionId}` },
+        { text: '🔄 Cập nhật lại', callback_data: `rf:${sessionId}` },
       ],
-      [{ text: '🏁 Close Session', callback_data: `cl:${sessionId}` }],
+      [{ text: '🏁 Chốt sổ kèo này', callback_data: `cl:${sessionId}` }],
     ],
   };
 }
@@ -87,8 +87,8 @@ export function buildFinalizeSelectionKeyboard(
     inline_keyboard: [
       ...memberButtons,
       [
-        { text: '✅ Confirm Finalize', callback_data: `fc:${sessionId}` },
-        { text: '❌ Cancel', callback_data: `fx:${sessionId}` },
+        { text: '✅ Xác nhận chốt', callback_data: `fc:${sessionId}` },
+        { text: '❌ Thôi bỏ', callback_data: `fx:${sessionId}` },
       ],
     ],
   };
@@ -99,6 +99,6 @@ export function buildFinalizeSelectionKeyboard(
  */
 export function buildDismissKeyboard(): TelegramInlineKeyboardMarkup {
   return {
-    inline_keyboard: [[{ text: '❌ Dismiss', callback_data: 'd' }]],
+    inline_keyboard: [[{ text: '❌ Đóng đi', callback_data: 'd' }]],
   };
 }

@@ -6,7 +6,7 @@ import { formatDateTime } from './datetime';
  * Get display name for a member, preferring display_name > first_name > username > 'Unknown'.
  */
 function memberName(m: { display_name: string | null; first_name: string | null; username: string | null }): string {
-  return m.display_name || m.first_name || (m.username ? `@${m.username}` : 'Unknown');
+  return m.display_name || m.first_name || (m.username ? `@${m.username}` : 'Người lạ nào đó');
 }
 
 /**
@@ -19,11 +19,11 @@ export function buildSessionMessage(
   let msg = `🏓 <b>${escapeHtml(session.title)}</b>\n`;
   if (session.scheduled_at) msg += `🕒 ${escapeHtml(formatDateTime(session.scheduled_at))}\n`;
   if (session.location) msg += `📍 ${escapeHtml(session.location)}\n`;
-  if (session.estimated_cost) msg += `💰 Estimated: ${formatVND(session.estimated_cost)} VND\n`;
+  if (session.estimated_cost) msg += `💰 Dự kiến đốt: ${formatVND(session.estimated_cost)} VND\n`;
   msg += '\n';
-  msg += `✅ Joining: ${counts.join}\n`;
-  msg += `🤔 Maybe: ${counts.maybe}\n`;
-  msg += `❌ Skip: ${counts.skip}`;
+  msg += `✅ Chốt đi: ${counts.join}\n`;
+  msg += `🤔 Còn lăn tăn: ${counts.maybe}\n`;
+  msg += `❌ Nghỉ cho khỏe: ${counts.skip}`;
   return msg;
 }
 
@@ -31,9 +31,9 @@ export function buildSessionMessage(
  * Build the finalized attendance message.
  */
 export function buildFinalizedMessage(session: Session, players: PlayerWithMember[]): string {
-  let msg = `🔒 <b>Attendance Finalized</b>\n\n`;
+  let msg = `🔒 <b>Đã chốt quân số</b>\n\n`;
   msg += `🏓 <b>${escapeHtml(session.title)}</b>\n`;
-  msg += `👥 Players: ${players.length}\n\n`;
+  msg += `👥 Số người ra sân: ${players.length}\n\n`;
   players.forEach((p, i) => {
     msg += `${i + 1}. ${escapeHtml(memberName(p))}\n`;
   });
@@ -51,18 +51,18 @@ export function buildPlayersListMessage(
   const maybeList = rsvps.filter((r) => r.rsvp_status === 'maybe');
   const skipList = rsvps.filter((r) => r.rsvp_status === 'skip');
 
-  let msg = `👥 <b>Players for ${escapeHtml(session.title)}</b>\n\n`;
+  let msg = `👥 <b>Danh sách cho kèo ${escapeHtml(session.title)}</b>\n\n`;
 
-  msg += `✅ <b>Joining (${joinList.length})</b>\n`;
-  if (joinList.length === 0) msg += '  — none\n';
+  msg += `✅ <b>Chốt đi (${joinList.length})</b>\n`;
+  if (joinList.length === 0) msg += '  — chưa thấy ai máu\n';
   else joinList.forEach((r) => (msg += `  • ${escapeHtml(memberName(r))}\n`));
 
-  msg += `\n🤔 <b>Maybe (${maybeList.length})</b>\n`;
-  if (maybeList.length === 0) msg += '  — none\n';
+  msg += `\n🤔 <b>Còn lăn tăn (${maybeList.length})</b>\n`;
+  if (maybeList.length === 0) msg += '  — không ai giả bộ phân vân\n';
   else maybeList.forEach((r) => (msg += `  • ${escapeHtml(memberName(r))}\n`));
 
-  msg += `\n❌ <b>Skip (${skipList.length})</b>\n`;
-  if (skipList.length === 0) msg += '  — none\n';
+  msg += `\n❌ <b>Nghỉ (${skipList.length})</b>\n`;
+  if (skipList.length === 0) msg += '  — chưa ai trốn\n';
   else skipList.forEach((r) => (msg += `  • ${escapeHtml(memberName(r))}\n`));
 
   return msg;
@@ -81,13 +81,13 @@ export function buildSplitMessage(
   const paidCount = splits.filter((s) => s.payment_status === 'paid').length;
   const unpaidCount = splits.filter((s) => s.payment_status === 'unpaid').length;
 
-  let msg = `💸 <b>Bill Summary</b>\n\n`;
+  let msg = `💸 <b>Tổng kết tiền nong</b>\n\n`;
   msg += `🏓 <b>${escapeHtml(session.title)}</b>\n`;
-  msg += `💰 Total: ${formatVND(totalCost)} VND\n`;
-  msg += `👥 Players: ${totalPlayers}\n`;
-  msg += `💵 Each owes: ${formatVND(perPerson)} VND\n\n`;
-  msg += `✅ Paid: ${paidCount}\n`;
-  msg += `⏳ Unpaid: ${unpaidCount}`;
+  msg += `💰 Tổng thiệt hại: ${formatVND(totalCost)} VND\n`;
+  msg += `👥 Số người chia: ${totalPlayers}\n`;
+  msg += `💵 Mỗi mạng đóng: ${formatVND(perPerson)} VND\n\n`;
+  msg += `✅ Đã trả: ${paidCount}\n`;
+  msg += `⏳ Còn nợ: ${unpaidCount}`;
   return msg;
 }
 
@@ -95,9 +95,9 @@ export function buildSplitMessage(
  * Build the unpaid players list message.
  */
 export function buildUnpaidMessage(session: Session, unpaid: SplitWithMember[]): string {
-  let msg = `⏳ <b>Unpaid — ${escapeHtml(session.title)}</b>\n\n`;
+  let msg = `⏳ <b>Danh sách còn nợ — ${escapeHtml(session.title)}</b>\n\n`;
   if (unpaid.length === 0) {
-    msg += '🎉 Everyone has paid!';
+    msg += '🎉 Tuyệt vời, không ai quỵt đồng nào!';
   } else {
     unpaid.forEach((s, i) => {
       msg += `${i + 1}. ${escapeHtml(memberName(s))} — ${formatVND(s.amount_due)} VND\n`;
@@ -112,14 +112,14 @@ export function buildUnpaidMessage(session: Session, unpaid: SplitWithMember[]):
  */
 export function buildMyStatusAlert(session: Session, split: SplitWithMember | null): string {
   if (!split) {
-    return `You are not in the player list for "${session.title}".`;
+    return `Bạn không có tên trong danh sách chơi của "${session.title}". Đừng nhận vơ nhé.`;
   }
-  const statusLabel = split.payment_status === 'paid' ? 'Paid ✅' : 'Unpaid ⏳';
-  let msg = `Your Status — ${session.title}\n\n`;
-  msg += `Amount due: ${formatVND(split.amount_due)} VND\n`;
-  msg += `Status: ${statusLabel}`;
+  const statusLabel = split.payment_status === 'paid' ? 'Đã trả ✅' : 'Chưa trả ⏳';
+  let msg = `Tình trạng của bạn — ${session.title}\n\n`;
+  msg += `Cần đóng: ${formatVND(split.amount_due)} VND\n`;
+  msg += `Trạng thái: ${statusLabel}`;
   if (split.paid_at) {
-    msg += `\nPaid at: ${split.paid_at}`;
+    msg += `\nĐã trả lúc: ${split.paid_at}`;
   }
   return msg;
 }
@@ -129,14 +129,14 @@ export function buildMyStatusAlert(session: Session, split: SplitWithMember | nu
  */
 export function buildMyStatusMessage(session: Session, split: SplitWithMember | null): string {
   if (!split) {
-    return `You are not in the finalized player list for <b>${escapeHtml(session.title)}</b>.`;
+    return `Bạn không nằm trong danh sách đã chốt của <b>${escapeHtml(session.title)}</b>. Đừng chen ngang chứ.`;
   }
   const statusEmoji = split.payment_status === 'paid' ? '✅' : '⏳';
-  let msg = `${statusEmoji} <b>Your Status — ${escapeHtml(session.title)}</b>\n\n`;
-  msg += `💵 Amount due: ${formatVND(split.amount_due)} VND\n`;
-  msg += `💰 Status: ${split.payment_status === 'paid' ? 'Paid ✅' : 'Unpaid ⏳'}`;
+  let msg = `${statusEmoji} <b>Tình trạng của bạn — ${escapeHtml(session.title)}</b>\n\n`;
+  msg += `💵 Cần đóng: ${formatVND(split.amount_due)} VND\n`;
+  msg += `💰 Trạng thái: ${split.payment_status === 'paid' ? 'Đã trả ✅' : 'Chưa trả ⏳'}`;
   if (split.paid_at) {
-    msg += `\n📅 Paid at: ${split.paid_at}`;
+    msg += `\n📅 Đã trả lúc: ${split.paid_at}`;
   }
   return msg;
 }
@@ -151,12 +151,12 @@ export function buildClosedMessage(
   unpaidCount: number,
 ): string {
   const totalCost = session.actual_cost ?? 0;
-  let msg = `✅ <b>Session Closed</b>\n\n`;
+  let msg = `✅ <b>Kèo này chốt sổ rồi nhé</b>\n\n`;
   msg += `🏓 <b>${escapeHtml(session.title)}</b>\n`;
-  msg += `👥 Players: ${totalPlayers}\n`;
-  msg += `💰 Total: ${formatVND(totalCost)} VND\n`;
-  msg += `✅ Paid: ${paidCount}\n`;
-  msg += `⏳ Unpaid: ${unpaidCount}`;
+  msg += `👥 Số người chơi: ${totalPlayers}\n`;
+  msg += `💰 Tổng tiền: ${formatVND(totalCost)} VND\n`;
+  msg += `✅ Đã trả: ${paidCount}\n`;
+  msg += `⏳ Còn nợ: ${unpaidCount}`;
   return msg;
 }
 
@@ -165,10 +165,10 @@ export function buildClosedMessage(
  */
 export function buildSessionListMessage(sessions: Session[]): string {
   if (sessions.length === 0) {
-    return '📋 No sessions found.';
+    return '📋 Chưa có kèo nào hết, lập kèo đi chứ.';
   }
 
-  let msg = '📋 <b>Recent Sessions</b>\n\n';
+  let msg = '📋 <b>Mấy kèo gần đây</b>\n\n';
   sessions.forEach((s, i) => {
     const statusEmoji =
       s.status === 'open' ? '🟢' : s.status === 'finalized' ? '🟡' : '✅';
@@ -187,10 +187,10 @@ export function buildFinalizeSelectionMessage(
   selectedCount: number,
   totalCount: number,
 ): string {
-  let msg = `🔒 <b>Select Players to Finalize</b>\n\n`;
+  let msg = `🔒 <b>Chọn người để chốt danh sách</b>\n\n`;
   msg += `🏓 <b>${escapeHtml(session.title)}</b>\n\n`;
-  msg += `Tap names to toggle. Players with ✅ will be finalized.\n`;
-  msg += `Selected: ${selectedCount} / ${totalCount}`;
+  msg += `Bấm vào tên để chọn hoặc bỏ chọn. Ai có ✅ là được chốt vào kèo.\n`;
+  msg += `Đã chọn: ${selectedCount} / ${totalCount}`;
   return msg;
 }
 
