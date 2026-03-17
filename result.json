@@ -1,0 +1,839 @@
+{
+ "name": "Điểm Danh PICCKKK",
+ "type": "private_group",
+ "id": 5123791756,
+ "messages": [
+  {
+   "id": 188765,
+   "type": "service",
+   "date": "2026-03-17T10:55:21",
+   "date_unixtime": "1773719721",
+   "actor": "DKMTech",
+   "actor_id": "user730774526",
+   "action": "create_group",
+   "title": "Điểm Danh PICCKKK",
+   "members": [
+    "DKMTech",
+    "Điểm Danh Pick"
+   ],
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 188766,
+   "type": "message",
+   "date": "2026-03-17T10:55:27",
+   "date_unixtime": "1773719727",
+   "from": "DKMTech",
+   "from_id": "user730774526",
+   "text": [
+    {
+     "type": "bot_command",
+     "text": "/start"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "bot_command",
+     "text": "/start"
+    }
+   ]
+  },
+  {
+   "id": 188767,
+   "type": "message",
+   "date": "2026-03-17T10:55:28",
+   "date_unixtime": "1773719728",
+   "from": "Điểm Danh Pick",
+   "from_id": "user8230422618",
+   "text": [
+    "🏓 ",
+    {
+     "type": "bold",
+     "text": "Pickleball Bot"
+    },
+    "\n\nI help manage pickleball sessions, attendance, bill splitting, and payment tracking.\n\nCommands:\n",
+    {
+     "type": "bot_command",
+     "text": "/session"
+    },
+    " — Create a new session\n",
+    {
+     "type": "bot_command",
+     "text": "/sessions"
+    },
+    " — View recent sessions\n",
+    {
+     "type": "bot_command",
+     "text": "/help"
+    },
+    " — Show help"
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🏓 "
+    },
+    {
+     "type": "bold",
+     "text": "Pickleball Bot"
+    },
+    {
+     "type": "plain",
+     "text": "\n\nI help manage pickleball sessions, attendance, bill splitting, and payment tracking.\n\nCommands:\n"
+    },
+    {
+     "type": "bot_command",
+     "text": "/session"
+    },
+    {
+     "type": "plain",
+     "text": " — Create a new session\n"
+    },
+    {
+     "type": "bot_command",
+     "text": "/sessions"
+    },
+    {
+     "type": "plain",
+     "text": " — View recent sessions\n"
+    },
+    {
+     "type": "bot_command",
+     "text": "/help"
+    },
+    {
+     "type": "plain",
+     "text": " — Show help"
+    }
+   ]
+  },
+  {
+   "id": 188768,
+   "type": "message",
+   "date": "2026-03-17T10:55:32",
+   "date_unixtime": "1773719732",
+   "from": "DKMTech",
+   "from_id": "user730774526",
+   "text": [
+    {
+     "type": "bot_command",
+     "text": "/session@diemdanhpickbot"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "bot_command",
+     "text": "/session@diemdanhpickbot"
+    }
+   ]
+  },
+  {
+   "id": 188769,
+   "type": "message",
+   "date": "2026-03-17T10:55:33",
+   "date_unixtime": "1773719733",
+   "from": "Điểm Danh Pick",
+   "from_id": "user8230422618",
+   "text": [
+    "⚠️ Please provide a session title.\n\nUsage: ",
+    {
+     "type": "code",
+     "text": "/session Title | Date/Time | Location | Cost"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "⚠️ Please provide a session title.\n\nUsage: "
+    },
+    {
+     "type": "code",
+     "text": "/session Title | Date/Time | Location | Cost"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 188770,
+   "type": "message",
+   "date": "2026-03-17T10:56:09",
+   "date_unixtime": "1773719769",
+   "from": "DKMTech",
+   "from_id": "user730774526",
+   "text": [
+    {
+     "type": "bot_command",
+     "text": "/session"
+    },
+    " 17/3 | 17/3/2026/12:00 | Pooc | 300"
+   ],
+   "text_entities": [
+    {
+     "type": "bot_command",
+     "text": "/session"
+    },
+    {
+     "type": "plain",
+     "text": " 17/3 | 17/3/2026/12:00 | Pooc | 300"
+    }
+   ]
+  },
+  {
+   "id": 188771,
+   "type": "message",
+   "date": "2026-03-17T10:56:10",
+   "date_unixtime": "1773719770",
+   "edited": "2026-03-17T10:58:07",
+   "edited_unixtime": "1773719887",
+   "from": "Điểm Danh Pick",
+   "from_id": "user8230422618",
+   "text": [
+    "🔒 ",
+    {
+     "type": "bold",
+     "text": "Attendance Finalized"
+    },
+    "\n\n🏓 ",
+    {
+     "type": "bold",
+     "text": "17/3"
+    },
+    "\n👥 Players: 3\n\n1. Minh Nhật\n2. Phan\n3. DKMTech"
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🔒 "
+    },
+    {
+     "type": "bold",
+     "text": "Attendance Finalized"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n🏓 "
+    },
+    {
+     "type": "bold",
+     "text": "17/3"
+    },
+    {
+     "type": "plain",
+     "text": "\n👥 Players: 3\n\n1. Minh Nhật\n2. Phan\n3. DKMTech"
+    }
+   ],
+   "inline_bot_buttons": [
+    [
+     {
+      "type": "callback",
+      "text": "👥 View Players",
+      "dataBase64": "djpwOjE",
+      "data": ""
+     }
+    ],
+    [
+     {
+      "type": "callback",
+      "text": "💸 Split Bill",
+      "dataBase64": "c2I6MQ",
+      "data": ""
+     }
+    ]
+   ]
+  },
+  {
+   "id": 188772,
+   "type": "service",
+   "date": "2026-03-17T10:56:26",
+   "date_unixtime": "1773719786",
+   "actor": "DKMTech",
+   "actor_id": "user730774526",
+   "action": "invite_members",
+   "members": [
+    "L3oN Nhật"
+   ],
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 188773,
+   "type": "service",
+   "date": "2026-03-17T10:56:26",
+   "date_unixtime": "1773719786",
+   "actor": "DKMTech",
+   "actor_id": "user730774526",
+   "action": "invite_members",
+   "members": [
+    "Phan An"
+   ],
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 188774,
+   "type": "message",
+   "date": "2026-03-17T10:57:01",
+   "date_unixtime": "1773719821",
+   "from": "Điểm Danh Pick",
+   "from_id": "user8230422618",
+   "text": [
+    "👥 ",
+    {
+     "type": "bold",
+     "text": "Players for 17/3"
+    },
+    "\n\n✅ ",
+    {
+     "type": "bold",
+     "text": "Joining (3)"
+    },
+    "\n  • DKMTech\n  • Minh Nhật\n  • Phan\n\n🤔 ",
+    {
+     "type": "bold",
+     "text": "Maybe (0)"
+    },
+    "\n  — none\n\n❌ ",
+    {
+     "type": "bold",
+     "text": "Skip (0)"
+    },
+    "\n  — none"
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "👥 "
+    },
+    {
+     "type": "bold",
+     "text": "Players for 17/3"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n✅ "
+    },
+    {
+     "type": "bold",
+     "text": "Joining (3)"
+    },
+    {
+     "type": "plain",
+     "text": "\n  • DKMTech\n  • Minh Nhật\n  • Phan\n\n🤔 "
+    },
+    {
+     "type": "bold",
+     "text": "Maybe (0)"
+    },
+    {
+     "type": "plain",
+     "text": "\n  — none\n\n❌ "
+    },
+    {
+     "type": "bold",
+     "text": "Skip (0)"
+    },
+    {
+     "type": "plain",
+     "text": "\n  — none"
+    }
+   ]
+  },
+  {
+   "id": 188775,
+   "type": "message",
+   "date": "2026-03-17T10:57:15",
+   "date_unixtime": "1773719835",
+   "from": "DKMTech",
+   "from_id": "user730774526",
+   "text": [
+    {
+     "type": "bot_command",
+     "text": "/help"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "bot_command",
+     "text": "/help"
+    }
+   ]
+  },
+  {
+   "id": 188776,
+   "type": "message",
+   "date": "2026-03-17T10:57:16",
+   "date_unixtime": "1773719836",
+   "from": "Điểm Danh Pick",
+   "from_id": "user8230422618",
+   "text": [
+    "📖 ",
+    {
+     "type": "bold",
+     "text": "How to use"
+    },
+    "\n\n",
+    {
+     "type": "bold",
+     "text": "Create a session:"
+    },
+    "\n",
+    {
+     "type": "code",
+     "text": "/session Title | Date/Time | Location | EstimatedCost"
+    },
+    "\nExample: ",
+    {
+     "type": "code",
+     "text": "/session Friday Pickleball | 7:00 PM | Court A | 120000"
+    },
+    "\n\n",
+    {
+     "type": "bold",
+     "text": "Workflow:"
+    },
+    "\n1️⃣ Admin creates session with ",
+    {
+     "type": "bot_command",
+     "text": "/session"
+    },
+    "\n2️⃣ Members tap Join / Maybe / Skip\n3️⃣ Admin taps Finalize Attendance\n4️⃣ Admin taps Split Bill and enters total cost\n5️⃣ Members tap Mark Paid\n6️⃣ Admin taps Close Session\n\n",
+    {
+     "type": "bold",
+     "text": "View recent sessions:"
+    },
+    "\n",
+    {
+     "type": "bot_command",
+     "text": "/sessions"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "📖 "
+    },
+    {
+     "type": "bold",
+     "text": "How to use"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n"
+    },
+    {
+     "type": "bold",
+     "text": "Create a session:"
+    },
+    {
+     "type": "plain",
+     "text": "\n"
+    },
+    {
+     "type": "code",
+     "text": "/session Title | Date/Time | Location | EstimatedCost"
+    },
+    {
+     "type": "plain",
+     "text": "\nExample: "
+    },
+    {
+     "type": "code",
+     "text": "/session Friday Pickleball | 7:00 PM | Court A | 120000"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n"
+    },
+    {
+     "type": "bold",
+     "text": "Workflow:"
+    },
+    {
+     "type": "plain",
+     "text": "\n1️⃣ Admin creates session with "
+    },
+    {
+     "type": "bot_command",
+     "text": "/session"
+    },
+    {
+     "type": "plain",
+     "text": "\n2️⃣ Members tap Join / Maybe / Skip\n3️⃣ Admin taps Finalize Attendance\n4️⃣ Admin taps Split Bill and enters total cost\n5️⃣ Members tap Mark Paid\n6️⃣ Admin taps Close Session\n\n"
+    },
+    {
+     "type": "bold",
+     "text": "View recent sessions:"
+    },
+    {
+     "type": "plain",
+     "text": "\n"
+    },
+    {
+     "type": "bot_command",
+     "text": "/sessions"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 188777,
+   "type": "message",
+   "date": "2026-03-17T10:58:02",
+   "date_unixtime": "1773719882",
+   "from": "Điểm Danh Pick",
+   "from_id": "user8230422618",
+   "text": [
+    "👥 ",
+    {
+     "type": "bold",
+     "text": "Players for 17/3"
+    },
+    "\n\n✅ ",
+    {
+     "type": "bold",
+     "text": "Joining (3)"
+    },
+    "\n  • Minh Nhật\n  • Phan\n  • DKMTech\n\n🤔 ",
+    {
+     "type": "bold",
+     "text": "Maybe (0)"
+    },
+    "\n  — none\n\n❌ ",
+    {
+     "type": "bold",
+     "text": "Skip (0)"
+    },
+    "\n  — none"
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "👥 "
+    },
+    {
+     "type": "bold",
+     "text": "Players for 17/3"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n✅ "
+    },
+    {
+     "type": "bold",
+     "text": "Joining (3)"
+    },
+    {
+     "type": "plain",
+     "text": "\n  • Minh Nhật\n  • Phan\n  • DKMTech\n\n🤔 "
+    },
+    {
+     "type": "bold",
+     "text": "Maybe (0)"
+    },
+    {
+     "type": "plain",
+     "text": "\n  — none\n\n❌ "
+    },
+    {
+     "type": "bold",
+     "text": "Skip (0)"
+    },
+    {
+     "type": "plain",
+     "text": "\n  — none"
+    }
+   ]
+  },
+  {
+   "id": 188778,
+   "type": "message",
+   "date": "2026-03-17T10:58:10",
+   "date_unixtime": "1773719890",
+   "from": "Điểm Danh Pick",
+   "from_id": "user8230422618",
+   "text": [
+    "💰 ",
+    {
+     "type": "bold",
+     "text": "Enter the total bill amount"
+    },
+    "\n\nPlease reply with the total cost. Example:\n",
+    {
+     "type": "code",
+     "text": "960000"
+    },
+    "\n",
+    {
+     "type": "code",
+     "text": "960,000"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "💰 "
+    },
+    {
+     "type": "bold",
+     "text": "Enter the total bill amount"
+    },
+    {
+     "type": "plain",
+     "text": "\n\nPlease reply with the total cost. Example:\n"
+    },
+    {
+     "type": "code",
+     "text": "960000"
+    },
+    {
+     "type": "plain",
+     "text": "\n"
+    },
+    {
+     "type": "code",
+     "text": "960,000"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 188779,
+   "type": "message",
+   "date": "2026-03-17T10:58:27",
+   "date_unixtime": "1773719907",
+   "from": "DKMTech",
+   "from_id": "user730774526",
+   "text": "300",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "300"
+    }
+   ]
+  },
+  {
+   "id": 188780,
+   "type": "message",
+   "date": "2026-03-17T10:58:37",
+   "date_unixtime": "1773719917",
+   "from": "DKMTech",
+   "from_id": "user730774526",
+   "reply_to_message_id": 188778,
+   "text": "300",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "300"
+    }
+   ]
+  },
+  {
+   "id": 188781,
+   "type": "message",
+   "date": "2026-03-17T10:58:39",
+   "date_unixtime": "1773719919",
+   "edited": "2026-03-17T10:58:55",
+   "edited_unixtime": "1773719935",
+   "from": "Điểm Danh Pick",
+   "from_id": "user8230422618",
+   "text": [
+    "💸 ",
+    {
+     "type": "bold",
+     "text": "Bill Summary"
+    },
+    "\n\n🏓 ",
+    {
+     "type": "bold",
+     "text": "17/3"
+    },
+    "\n💰 Total: 300 VND\n👥 Players: 3\n💵 Each owes: 100 VND\n\n✅ Paid: 2\n⏳ Unpaid: 1"
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "💸 "
+    },
+    {
+     "type": "bold",
+     "text": "Bill Summary"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n🏓 "
+    },
+    {
+     "type": "bold",
+     "text": "17/3"
+    },
+    {
+     "type": "plain",
+     "text": "\n💰 Total: 300 VND\n👥 Players: 3\n💵 Each owes: 100 VND\n\n✅ Paid: 2\n⏳ Unpaid: 1"
+    }
+   ],
+   "inline_bot_buttons": [
+    [
+     {
+      "type": "callback",
+      "text": "💰 Mark Paid",
+      "dataBase64": "bXA6MQ",
+      "data": ""
+     },
+     {
+      "type": "callback",
+      "text": "📊 My Status",
+      "dataBase64": "bXM6MQ",
+      "data": ""
+     }
+    ],
+    [
+     {
+      "type": "callback",
+      "text": "⏳ View Unpaid",
+      "dataBase64": "dnU6MQ",
+      "data": ""
+     },
+     {
+      "type": "callback",
+      "text": "🔄 Refresh",
+      "dataBase64": "cmY6MQ",
+      "data": ""
+     }
+    ]
+   ]
+  },
+  {
+   "id": 188782,
+   "type": "message",
+   "date": "2026-03-17T10:58:58",
+   "date_unixtime": "1773719938",
+   "from": "Điểm Danh Pick",
+   "from_id": "user8230422618",
+   "text": [
+    "⏳ ",
+    {
+     "type": "bold",
+     "text": "Your Status — 17/3"
+    },
+    "\n\n💵 Amount due: 100 VND\n💰 Status: Unpaid ⏳"
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "⏳ "
+    },
+    {
+     "type": "bold",
+     "text": "Your Status — 17/3"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n💵 Amount due: 100 VND\n💰 Status: Unpaid ⏳"
+    }
+   ]
+  },
+  {
+   "id": 188783,
+   "type": "message",
+   "date": "2026-03-17T10:59:09",
+   "date_unixtime": "1773719949",
+   "from": "Điểm Danh Pick",
+   "from_id": "user8230422618",
+   "text": [
+    "✅ ",
+    {
+     "type": "bold",
+     "text": "Your Status — 17/3"
+    },
+    "\n\n💵 Amount due: 100 VND\n💰 Status: Paid ✅\n📅 Paid at: 2026-03-17 03:58:52"
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "✅ "
+    },
+    {
+     "type": "bold",
+     "text": "Your Status — 17/3"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n💵 Amount due: 100 VND\n💰 Status: Paid ✅\n📅 Paid at: 2026-03-17 03:58:52"
+    }
+   ]
+  },
+  {
+   "id": 188784,
+   "type": "message",
+   "date": "2026-03-17T10:59:13",
+   "date_unixtime": "1773719953",
+   "from": "Điểm Danh Pick",
+   "from_id": "user8230422618",
+   "text": [
+    "⏳ ",
+    {
+     "type": "bold",
+     "text": "Unpaid — 17/3"
+    },
+    "\n\n1. DKMTech — 100 VND"
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "⏳ "
+    },
+    {
+     "type": "bold",
+     "text": "Unpaid — 17/3"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n1. DKMTech — 100 VND"
+    }
+   ]
+  },
+  {
+   "id": 188785,
+   "type": "message",
+   "date": "2026-03-17T10:59:17",
+   "date_unixtime": "1773719957",
+   "from": "Điểm Danh Pick",
+   "from_id": "user8230422618",
+   "text": [
+    "⏳ ",
+    {
+     "type": "bold",
+     "text": "Unpaid — 17/3"
+    },
+    "\n\n1. DKMTech — 100 VND"
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "⏳ "
+    },
+    {
+     "type": "bold",
+     "text": "Unpaid — 17/3"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n1. DKMTech — 100 VND"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,9 @@
+name = "pickleball-bot"
+main = "src/index.ts"
+compatibility_date = "2024-06-20"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "pickleball-db"
+database_id = "ff0e9dae-1fd7-4700-aaa7-8fe9e5c6039f"
+migrations_dir = "migrations"
