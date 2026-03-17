@@ -30,11 +30,17 @@ export class SplitService {
       return { success: false, error: 'No finalized players found.' };
     }
 
-    const perPerson = Math.ceil(totalCost / players.length);
+    // Create split records (INSERT OR IGNORE for idempotency)
+    // VND should not have fractions, so we round to nearest integer to avoid float DB errors
+    const perPerson = Math.round(totalCost / players.length);
     const memberIds = players.map((p) => p.member_id);
 
-    // Create split records (INSERT OR IGNORE for idempotency)
-    await this.splitRepo.batchInsert(session.id, memberIds, perPerson);
+    try {
+      await this.splitRepo.batchInsert(session.id, memberIds, perPerson);
+    } catch (err) {
+      console.error('Failed to insert splits:', err);
+      return { success: false, error: 'Failed to save bill split. Please try again.' };
+    }
 
     return { success: true, perPerson };
   }

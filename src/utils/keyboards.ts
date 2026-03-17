@@ -13,7 +13,10 @@ export function buildRsvpKeyboard(sessionId: number): TelegramInlineKeyboardMark
         { text: '❌ Nghỉ kèo', callback_data: `r:s:${sessionId}` },
       ],
       [{ text: '👥 Xem danh sách', callback_data: `v:p:${sessionId}` }],
-      [{ text: '🔒 Chốt danh sách', callback_data: `f:${sessionId}` }],
+      [
+        { text: '🔒 Chốt danh sách', callback_data: `f:${sessionId}` },
+        { text: '🗑️ Hủy kèo', callback_data: `cx:${sessionId}` },
+      ],
     ],
   };
 }
@@ -25,7 +28,10 @@ export function buildFinalizedKeyboard(sessionId: number): TelegramInlineKeyboar
   return {
     inline_keyboard: [
       [{ text: '👥 Xem danh sách', callback_data: `v:p:${sessionId}` }],
-      [{ text: '💸 Chia tiền sân', callback_data: `sb:${sessionId}` }],
+      [
+        { text: '💸 Chia tiền sân', callback_data: `sb:${sessionId}` },
+        { text: '🗑️ Hủy kèo', callback_data: `cx:${sessionId}` },
+      ],
     ],
   };
 }
@@ -44,7 +50,10 @@ export function buildSplitKeyboard(sessionId: number): TelegramInlineKeyboardMar
         { text: '⏳ Ai còn nợ', callback_data: `vu:${sessionId}` },
         { text: '🔄 Cập nhật lại', callback_data: `rf:${sessionId}` },
       ],
-      [{ text: '🏁 Chốt sổ kèo này', callback_data: `cl:${sessionId}` }],
+      [
+        { text: '🏁 Chốt sổ kèo này', callback_data: `cl:${sessionId}` },
+        { text: '🗑️ Hủy kèo', callback_data: `cx:${sessionId}` },
+      ],
     ],
   };
 }

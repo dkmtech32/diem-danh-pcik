@@ -22,6 +22,7 @@ import {
   buildMyStatusAlert,
   buildClosedMessage,
   buildFinalizeSelectionMessage,
+  escapeHtml,
 } from '../utils/message-builders';
 import {
   buildRsvpKeyboard,
@@ -129,6 +130,9 @@ export async function handleCallback(
         break;
       case 'cl': // Close: cl:sessionId
         await handleCloseCallback(query, parts, group, member, telegram, env, chatId);
+        break;
+      case 'cx': // Cancel: cx:sessionId
+        await handleCancelSessionCallback(query, parts, group, member, telegram, env, chatId);
         break;
       case 'sbc': // Split bill confirm with amount: sbc:sessionId:amount
         await handleSplitBillConfirmCallback(query, parts, group, member, telegram, env, chatId);
@@ -731,6 +735,51 @@ async function handleRefreshCallback(
 
   await telegram.answerCallbackQuery(query.id, '🔄 Refreshed!');
   await refreshSplitMessage(sessionId, session, chatId, query.from.id, telegram, env);
+}
+
+// ==================== Cancel Session ====================
+async function handleCancelSessionCallback(
+  query: TelegramCallbackQuery,
+  parts: string[],
+  group: Group,
+  member: Member,
+  telegram: TelegramService,
+  env: Env,
+  chatId: number,
+): Promise<void> {
+  const sessionId = parseInt(parts[1], 10);
+  if (isNaN(sessionId)) {
+    await telegram.answerCallbackQuery(query.id, 'Invalid action.');
+    return;
+  }
+
+  // Admin check
+  const admin = await isGroupAdmin(telegram, chatId, query.from.id, env.DB, group.id, member.id);
+  if (!admin) {
+    await telegram.answerCallbackQuery(query.id, 'Chỉ admin mới được hủy kèo.', true);
+    return;
+  }
+
+  const services = buildServices(env);
+  const session = await services.sessionService.getById(sessionId);
+  if (!session) {
+    await telegram.answerCallbackQuery(query.id, 'Không tìm thấy kèo.', true);
+    return;
+  }
+
+  // Close the session in DB (we use 'closed' status for both successful closures and cancellations)
+  await services.sessionService.close(session);
+
+  await telegram.answerCallbackQuery(query.id, '🚫 Đã hủy kèo!');
+
+  const text = `🚫 <b>Kèo đã bị hủy bởi Admin</b>\n\n🏓 <b>${escapeHtml(session.title)}</b>`;
+  const keyboard = buildClosedKeyboard();
+
+  if (session.telegram_message_id) {
+    await telegram.editMessageText(chatId, session.telegram_message_id, text, keyboard);
+  } else {
+    await telegram.sendMessage(chatId, text);
+  }
 }
 
 // ==================== Close Session ====================
