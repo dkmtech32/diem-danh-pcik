@@ -53,4 +53,35 @@ app.post('/delete-webhook', async (c) => {
   return c.json(data);
 });
 
-export default app;
+export default {
+  fetch: app.fetch,
+  scheduled: async (event: any, env: Env, ctx: any) => {
+    try {
+      const { GroupRepo } = await import('./repositories/group-repo');
+      const { SplitRepo } = await import('./repositories/split-repo');
+      const { PaymentService } = await import('./services/payment-service');
+      const { TelegramService } = await import('./services/telegram-service');
+
+      const groupRepo = new GroupRepo(env.DB);
+      const splitRepo = new SplitRepo(env.DB);
+      const paymentService = new PaymentService(splitRepo);
+      const telegram = new TelegramService(env.TELEGRAM_BOT_TOKEN);
+
+      const groups = await groupRepo.listAll();
+      
+      for (const group of groups) {
+        try {
+          const text = await paymentService.getUnpaidSummaryMessage(group.id);
+          // Only send message if there are people who owe money
+          if (text) {
+            await telegram.sendMessage(group.telegram_chat_id, text);
+          }
+        } catch (err) {
+          console.error(`Failed to send unpaid reminder for group ${group.id}:`, err);
+        }
+      }
+    } catch (err) {
+      console.error('Scheduled task error:', err);
+    }
+  },
+};

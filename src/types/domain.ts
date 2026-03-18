@@ -99,3 +99,13 @@ export interface SplitWithMember extends SessionSplit {
   username: string | null;
   telegram_user_id: string;
 }
+
+export interface UnpaidSummary {
+  member_id: number;
+  telegram_user_id: string;
+  display_name: string | null;
+  first_name: string | null;
+  username: string | null;
+  total_unpaid: number;
+  session_count: number;
+}

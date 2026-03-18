@@ -7,3 +7,7 @@ binding = "DB"
 database_name = "pickleball-db"
 database_id = "ff0e9dae-1fd7-4700-aaa7-8fe9e5c6039f"
 migrations_dir = "migrations"
+
+[triggers]
+# Run every day at 1:00 AM UTC (8:00 AM ICT/Vietnam)
+crons = ["0 1 * * *"]

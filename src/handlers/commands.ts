@@ -34,10 +34,15 @@ export async function handleCommand(
     case '/sessions':
       await handleSessions(message, group, telegram, env);
       break;
+    case '/no':
+    case '/unpaid':
+      await handleUnpaid(message, group, telegram, env);
+      break;
     default:
       break;
   }
 }
+
 async function handleStart(message: TelegramMessage, telegram: TelegramService): Promise<void> {
   await telegram.sendMessage(
     message.chat.id,
@@ -132,3 +137,24 @@ async function handleSessions(
   const text = buildSessionListMessage(sessions);
   await telegram.sendMessage(message.chat.id, text);
 }
+
+async function handleUnpaid(
+  message: TelegramMessage,
+  group: Group,
+  telegram: TelegramService,
+  env: Env,
+): Promise<void> {
+  const { SplitRepo } = await import('../repositories/split-repo');
+  const { PaymentService } = await import('../services/payment-service');
+  
+  const splitRepo = new SplitRepo(env.DB);
+  const paymentService = new PaymentService(splitRepo);
+
+  const text = await paymentService.getUnpaidSummaryMessage(group.id);
+  if (!text) {
+    await telegram.sendMessage(message.chat.id, '🎉 Tuyệt vời! Hiện tại nhóm không có ai nợ tiền sân.');
+  } else {
+    await telegram.sendMessage(message.chat.id, text);
+  }
+}
+

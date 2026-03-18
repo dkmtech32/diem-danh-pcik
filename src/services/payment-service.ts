@@ -30,4 +30,24 @@ export class PaymentService {
   async listUnpaid(sessionId: number): Promise<SplitWithMember[]> {
     return this.splitRepo.listUnpaid(sessionId);
   }
+
+  async getUnpaidSummaryMessage(groupId: number): Promise<string | null> {
+    const summaries = await this.splitRepo.getUnpaidSummaryByGroup(groupId);
+    if (!summaries || summaries.length === 0) return null;
+
+    let text = '💥 <b>Danh sách Ai còn nợ (Chưa đóng tiền sân)</b> 💥\n\n';
+    let totalAll = 0;
+
+    for (const s of summaries) {
+      const name = s.display_name || s.first_name || s.username || 'Người chơi ẩn danh';
+      const mention = s.username ? `@${s.username}` : `<a href="tg://user?id=${s.telegram_user_id}">${name}</a>`;
+      text += `• ${mention}: <b>${s.total_unpaid.toLocaleString()}đ</b> (${s.session_count} buổi)\n`;
+      totalAll += s.total_unpaid;
+    }
+
+    text += `\n💰 <b>Tổng nợ cả nhóm: ${totalAll.toLocaleString()}đ</b>\n`;
+    text += `\nNhanh tay ting ting cho chủ thớt nhé! 💸`;
+
+    return text;
+  }
 }

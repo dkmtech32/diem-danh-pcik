@@ -84,4 +84,28 @@ export class SplitRepo {
     }
     return counts;
   }
+
+  async getUnpaidSummaryByGroup(groupId: number): Promise<import('../types/domain').UnpaidSummary[]> {
+    const result = await this.db
+      .prepare(
+        `SELECT 
+           s.member_id,
+           m.telegram_user_id,
+           m.display_name,
+           m.first_name,
+           m.username,
+           SUM(s.amount_due - s.amount_paid) as total_unpaid,
+           COUNT(s.id) as session_count
+         FROM session_splits s
+         JOIN members m ON s.member_id = m.id
+         JOIN sessions sess ON s.session_id = sess.id
+         WHERE sess.group_id = ? AND s.payment_status = 'unpaid'
+         GROUP BY s.member_id
+         HAVING total_unpaid > 0
+         ORDER BY total_unpaid DESC`,
+      )
+      .bind(groupId)
+      .all<import('../types/domain').UnpaidSummary>();
+    return result.results;
+  }
 }

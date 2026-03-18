@@ -39,4 +39,9 @@ export class GroupRepo {
       .bind(telegramChatId)
       .first<Group>();
   }
+
+  async listAll(): Promise<Group[]> {
+    const result = await this.db.prepare('SELECT * FROM groups').all<Group>();
+    return result.results;
+  }
 }
