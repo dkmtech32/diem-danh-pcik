@@ -5,7 +5,7 @@ import { GroupService } from '../services/group-service';
 import { GroupRepo } from '../repositories/group-repo';
 import { MemberRepo } from '../repositories/member-repo';
 import { handleCommand } from './commands';
-import { handleCallback, handlePendingSplitInput } from './callbacks';
+import { handleCallback, handlePendingSplitInput, handlePendingAddGuestInput } from './callbacks';
 
 export async function handleWebhook(update: TelegramUpdate, env: Env): Promise<void> {
   const telegram = new TelegramService(env.TELEGRAM_BOT_TOKEN);
@@ -65,6 +65,17 @@ export async function handleWebhook(update: TelegramUpdate, env: Env): Promise<v
         env,
       );
       if (handled) return;
+
+      const handledGuest = await handlePendingAddGuestInput(
+        chat.id,
+        user.id,
+        message.text,
+        member,
+        telegram,
+        env,
+        group,
+      );
+      if (handledGuest) return;
     }
 
     // Check for bot commands

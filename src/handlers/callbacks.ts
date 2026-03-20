@@ -49,11 +49,27 @@ export function clearPendingSplit(chatId: number | string, userId: number): void
   pendingSplitCost.delete(`${chatId}:${userId}`);
 }
 
+// State for pending add guest input (in-memory, per worker instance)
+const pendingAddGuest = new Map<string, number>(); // `chatId:userId` -> sessionId
+
+export function setPendingAddGuest(chatId: number | string, userId: number, sessionId: number): void {
+  pendingAddGuest.set(`${chatId}:${userId}`, sessionId);
+}
+
+export function getPendingAddGuest(chatId: number | string, userId: number): number | undefined {
+  return pendingAddGuest.get(`${chatId}:${userId}`);
+}
+
+export function clearPendingAddGuest(chatId: number | string, userId: number): void {
+  pendingAddGuest.delete(`${chatId}:${userId}`);
+}
+
 function buildServices(env: Env) {
   const sessionRepo = new SessionRepo(env.DB);
   const rsvpRepo = new RsvpRepo(env.DB);
   const playerRepo = new PlayerRepo(env.DB);
   const splitRepo = new SplitRepo(env.DB);
+  const memberRepo = new MemberRepo(env.DB);
 
   return {
     sessionService: new SessionService(sessionRepo, rsvpRepo, playerRepo),
@@ -61,6 +77,8 @@ function buildServices(env: Env) {
     splitService: new SplitService(sessionRepo, playerRepo, splitRepo),
     paymentService: new PaymentService(splitRepo),
     playerRepo,
+    memberRepo,
+    rsvpRepo,
   };
 }
 
@@ -94,6 +112,9 @@ export async function handleCallback(
           await telegram.deleteMessage(chatId, query.message.message_id);
         }
         await telegram.answerCallbackQuery(query.id);
+        break;
+      case 'ag': // Add guest: ag:sessionId
+        await handleAddGuestCallback(query, parts, group, member, telegram, env, chatId);
         break;
       case 'r': // RSVP: r:j:sessionId, r:m:sessionId, r:s:sessionId
         await handleRsvpCallback(query, parts, group, member, telegram, env, chatId);
@@ -235,26 +256,23 @@ async function handleViewPlayersCallback(
   const text = buildPlayersListMessage(session, rsvps);
 
   await telegram.answerCallbackQuery(query.id);
-  // Try to send as DM (private); fall back to group message with dismiss button
-  const dmSent = await telegram.sendMessage(query.from.id, text);
-  if (!dmSent) {
-    const ephRepo = new EphemeralMessageRepo(env.DB);
-    const typeKey = `view_players_${sessionId}`;
+  // Send as group message and delete old ephemeral message
+  const ephRepo = new EphemeralMessageRepo(env.DB);
+  const typeKey = `view_players_${sessionId}`;
 
-    // Delete any previous group messages of this type
-    const previous = await ephRepo.getByType(chatId, typeKey);
-    const deletedIds: number[] = [];
-    for (const msg of previous) {
-      await telegram.deleteMessage(chatId, msg.message_id);
-      deletedIds.push(msg.id);
-    }
-    await ephRepo.deleteRecords(deletedIds);
+  // Delete any previous group messages of this type
+  const previous = await ephRepo.getByType(chatId, typeKey);
+  const deletedIds: number[] = [];
+  for (const msg of previous) {
+    await telegram.deleteMessage(chatId, msg.message_id);
+    deletedIds.push(msg.id);
+  }
+  await ephRepo.deleteRecords(deletedIds);
 
-    // Send new message and save its ID
-    const sentMsg = await telegram.sendMessage(chatId, text, buildDismissKeyboard());
-    if (sentMsg) {
-      await ephRepo.save(chatId, sentMsg.message_id, typeKey);
-    }
+  // Send new message and save its ID
+  const sentMsg = await telegram.sendMessage(chatId, text, buildDismissKeyboard());
+  if (sentMsg) {
+    await ephRepo.save(chatId, sentMsg.message_id, typeKey);
   }
 }
 
@@ -554,6 +572,115 @@ export async function handlePendingSplitInput(
   return true;
 }
 
+// ==================== Add Guest ====================
+async function handleAddGuestCallback(
+  query: TelegramCallbackQuery,
+  parts: string[],
+  group: Group,
+  member: Member,
+  telegram: TelegramService,
+  env: Env,
+  chatId: number,
+): Promise<void> {
+  const sessionId = parseInt(parts[1], 10);
+  if (isNaN(sessionId)) {
+    await telegram.answerCallbackQuery(query.id, 'Invalid action.');
+    return;
+  }
+
+  // Admin check
+  const admin = await isGroupAdmin(telegram, chatId, query.from.id, env.DB, group.id, member.id);
+  if (!admin) {
+    await telegram.answerCallbackQuery(query.id, '⚠️ Chỉ admin mới được thêm khách.', true);
+    return;
+  }
+
+  const session = await getSessionOrError(sessionId, query, telegram, env);
+  if (!session) return;
+
+  if (session.status !== 'open') {
+    await telegram.answerCallbackQuery(query.id, 'Kèo này đã chốt, không thể thêm khách nữa.', true);
+    return;
+  }
+
+  // Store pending add guest and ask for name
+  setPendingAddGuest(chatId, query.from.id, sessionId);
+
+  await telegram.answerCallbackQuery(query.id);
+  // Send prompt with a dismiss button
+  await telegram.sendMessage(
+    chatId,
+    '👤 <b>Vui lòng gửi tên khách</b>\n\n' +
+      'Ví dụ: <code>Bạn anh Khang</code>',
+    buildDismissKeyboard(),
+  );
+}
+
+/**
+ * Handle a text message that might be an add guest reply.
+ */
+export async function handlePendingAddGuestInput(
+  chatId: number,
+  userId: number,
+  text: string,
+  member: Member,
+  telegram: TelegramService,
+  env: Env,
+  group: Group,
+): Promise<boolean> {
+  const sessionId = getPendingAddGuest(chatId, userId);
+  if (sessionId === undefined) return false;
+
+  clearPendingAddGuest(chatId, userId);
+
+  const guestName = text.trim();
+  if (!guestName) {
+    await telegram.sendMessage(chatId, '⚠️ Tên khách không hợp lệ. Vui lòng thử lại bằng cách bấm "➕ Thêm khách".');
+    return true;
+  }
+
+  const services = buildServices(env);
+  const session = await services.sessionService.getById(sessionId);
+  if (!session || session.status !== 'open') {
+    await telegram.sendMessage(chatId, '⚠️ Kèo đã đóng hoặc không tìm thấy.');
+    return true;
+  }
+
+  try {
+    // 1. Create a guest member
+    const guestIdStr = `guest_${group.id}_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+    const newMember = await services.memberRepo.upsert(
+      guestIdStr,
+      null,
+      guestName,
+      null
+    );
+
+    // 2. Add to group
+    await services.memberRepo.upsertGroupMember(group.id, newMember.id, 'member');
+
+    // 3. Add RSVP to join
+    await services.rsvpRepo.upsert(sessionId, newMember.id, 'join', 'admin');
+
+    // 4. Update session message
+    const counts = await services.rsvpService.countBySession(sessionId);
+    const sessionMsgText = buildSessionMessage(session, counts);
+    const keyboard = buildRsvpKeyboard(sessionId);
+
+    if (session.telegram_message_id) {
+      await telegram.editMessageText(chatId, session.telegram_message_id, sessionMsgText, keyboard);
+    }
+
+    await telegram.sendMessage(chatId, `✅ Đã thêm khách <b>${escapeHtml(guestName)}</b> vào kèo!`, buildDismissKeyboard());
+
+  } catch (err) {
+    console.error('Error adding guest:', err);
+    await telegram.sendMessage(chatId, '⚠️ Có lỗi xảy ra khi thêm khách.');
+  }
+
+  return true;
+}
+
 // ==================== Split Bill Confirm (inline button with amount) ====================
 async function handleSplitBillConfirmCallback(
   query: TelegramCallbackQuery,
@@ -692,26 +819,23 @@ async function handleViewUnpaidCallback(
   const text = buildUnpaidMessage(session, unpaid);
 
   await telegram.answerCallbackQuery(query.id);
-  // Try DM first; fall back to group message with dismiss button
-  const dmSent = await telegram.sendMessage(query.from.id, text);
-  if (!dmSent) {
-    const ephRepo = new EphemeralMessageRepo(env.DB);
-    const typeKey = `view_unpaid_${sessionId}`;
+  // Send as group message and delete old ephemeral message
+  const ephRepo = new EphemeralMessageRepo(env.DB);
+  const typeKey = `view_unpaid_${sessionId}`;
 
-    // Delete previous group messages of this type
-    const previous = await ephRepo.getByType(chatId, typeKey);
-    const deletedIds: number[] = [];
-    for (const msg of previous) {
-      await telegram.deleteMessage(chatId, msg.message_id);
-      deletedIds.push(msg.id);
-    }
-    await ephRepo.deleteRecords(deletedIds);
+  // Delete previous group messages of this type
+  const previous = await ephRepo.getByType(chatId, typeKey);
+  const deletedIds: number[] = [];
+  for (const msg of previous) {
+    await telegram.deleteMessage(chatId, msg.message_id);
+    deletedIds.push(msg.id);
+  }
+  await ephRepo.deleteRecords(deletedIds);
 
-    // Send new message and save its ID
-    const sentMsg = await telegram.sendMessage(chatId, text, buildDismissKeyboard());
-    if (sentMsg) {
-      await ephRepo.save(chatId, sentMsg.message_id, typeKey);
-    }
+  // Send new message and save its ID
+  const sentMsg = await telegram.sendMessage(chatId, text, buildDismissKeyboard());
+  if (sentMsg) {
+    await ephRepo.save(chatId, sentMsg.message_id, typeKey);
   }
 }
 

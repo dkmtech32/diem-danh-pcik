@@ -12,7 +12,10 @@ export function buildRsvpKeyboard(sessionId: number): TelegramInlineKeyboardMark
         { text: '🤔 Để coi đã', callback_data: `r:m:${sessionId}` },
         { text: '❌ Nghỉ kèo', callback_data: `r:s:${sessionId}` },
       ],
-      [{ text: '👥 Xem danh sách', callback_data: `v:p:${sessionId}` }],
+      [
+        { text: '👥 Xem danh sách', callback_data: `v:p:${sessionId}` },
+        { text: '➕ Thêm khách', callback_data: `ag:${sessionId}` },
+      ],
       [
         { text: '🔒 Chốt danh sách', callback_data: `f:${sessionId}` },
         { text: '🗑️ Hủy kèo', callback_data: `cx:${sessionId}` },
